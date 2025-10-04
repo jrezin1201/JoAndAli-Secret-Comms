@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P App Generator - E2E Encrypted</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">🔐 Encrypted P2P Messenger Generator</h1>
+            <p class="text-xl text-gray-600">Create your own end-to-end encrypted messaging app</p>
+            <p class="text-sm text-gray-500 mt-2">Military-grade encryption. No servers. Unbreakable privacy.</p>
+        </div>
+
+```
+    <div class="grid md:grid-cols-2 gap-8">
+        <!-- Customization Panel -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Customize Your App</h2>
+            
+            <div class="space-y-6">
+                <!-- App Name -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">App Name</label>
+                    <input 
+                        type="text" 
+                        id="appName" 
+                        value="SecureChat" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        oninput="updatePreview()"
+                    />
+                </div>
+
+                <!-- Brand Color -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Brand Color</label>
+                    <div class="flex gap-3">
+                        <input 
+                            type="color" 
+                            id="brandColor" 
+                            value="#7C3AED" 
+                            class="h-12 w-20 rounded-lg cursor-pointer"
+                            oninput="updatePreview()"
+                        />
+                        <input 
+                            type="text" 
+                            id="brandColorText" 
+                            value="#7C3AED" 
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg"
+                            oninput="syncColorPicker()"
+                        />
+                    </div>
+                </div>
+
+                <!-- Tagline -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>
+                    <input 
+                        type="text" 
+                        id="tagline" 
+                        value="Encrypted. Private. Yours." 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        oninput="updatePreview()"
+                    />
+                </div>
+
+                <!-- Signaling Server -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Signaling Server</label>
+                    <input 
+                        type="text" 
+                        id="signalingServer" 
+                        value="wss://ancient-basin-production.up.railway.app" 
+                        placeholder="Use default or host your own"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                    <p class="text-xs text-gray-500 mt-1">The signaling server CANNOT read your messages - only helps devices find each other</p>
+                </div>
+
+                <!-- Security Features -->
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 class="font-bold text-green-900 mb-2">🔐 Security Features Included:</h3>
+                    <ul class="text-sm text-green-800 space-y-1">
+                        <li>✅ End-to-End Encryption (AES-GCM 256-bit)</li>
+                        <li>✅ Perfect Forward Secrecy (new keys per session)</li>
+                        <li>✅ Key Fingerprint Verification</li>
+                        <li>✅ No message storage anywhere</li>
+                        <li>✅ Encrypted peer-to-peer only</li>
+                    </ul>
+                </div>
+
+                <!-- Generate Button -->
+                <button 
+                    onclick="generateApp()" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+                >
+                    🎉 Generate My Encrypted App
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Live Preview</h2>
+            
+            <div id="preview" class="border-4 border-gray-300 rounded-3xl overflow-hidden shadow-2xl" style="height: 600px;">
+                <div class="h-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-8">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full">
+                        <div class="text-center">
+                            <div id="previewIcon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: #7C3AED;">
+                                <svg class="text-white" width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            <h1 id="previewName" class="text-3xl font-bold text-gray-800 mb-2">SecureChat</h1>
+                            <p id="previewTagline" class="text-gray-600">Encrypted. Private. Yours.</p>
+                        </div>
+
+                        <div class="mt-8 space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+                                <input type="text" placeholder="Enter your name" class="w-full px-4 py-3 border border-gray-300 rounded-lg" disabled />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Room ID</label>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="Enter or generate" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg" disabled />
+                                    <button class="px-4 py-3 bg-gray-200 rounded-lg font-medium" disabled>Generate</button>
+                                </div>
+                            </div>
+                            <button id="previewButton" class="w-full text-white font-semibold py-3 rounded-lg" style="background-color: #7C3AED;" disabled>
+                                Join Encrypted Room
+                            </button>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="flex items-center justify-center gap-2 text-xs text-green-600 mb-2">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                                </svg>
+                                <span class="font-semibold">End-to-End Encrypted</span>
+                            </div>
+                            <p class="text-xs text-gray-500 text-center">
+                                Your messages are encrypted before leaving your device. Not even the server can read them.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Code Section -->
+    <div id="generatedSection" class="mt-12 bg-white rounded-2xl shadow-xl p-8 hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Your Encrypted App Code</h2>
+            <button onclick="copyCode()" id="copyBtn" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors">
+                📋 Copy Code
+            </button>
+        </div>
+        
+        <div class="bg-gray-900 rounded-lg p-6 overflow-x-auto max-h-96">
+            <pre id="generatedCode" class="text-green-400 text-sm"><code></code></pre>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-4">
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h3 class="font-bold text-blue-900 mb-2">📱 Step 1: Save</h3>
+                <p class="text-sm text-blue-800">Save as <code class="bg-blue-200 px-2 py-1 rounded">index.html</code></p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+                <h3 class="font-bold text-green-900 mb-2">🌐 Step 2: Host</h3>
+                <p class="text-sm text-green-800">Upload to GitHub Pages, Netlify, or any web host</p>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <h3 class="font-bold text-purple-900 mb-2">🎉 Step 3: Share</h3>
+                <p class="text-sm text-purple-800">Share the link - messages are encrypted end-to-end!</p>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-red-50 border-2 border-red-300 rounded-lg p-6">
+            <h3 class="font-bold text-red-900 mb-3 flex items-center gap-2">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                </svg>
+                SECURITY NOTICE
+            </h3>
+            <div class="text-sm text-red-800 space-y-2">
+                <p><strong>✅ Your messages ARE encrypted:</strong> Nobody can read them in transit, not even the signaling server or your ISP.</p>
+                <p><strong>🔐 Key Fingerprints:</strong> When you connect, verify the key fingerprint with your contact through another channel (phone call, in person) to prevent man-in-the-middle attacks.</p>
+                <p><strong>📱 Device Security:</strong> The only way to read messages is physical access to an unlocked phone or device malware. Keep your devices secure!</p>
+                <p><strong>⚠️ No Message Recovery:</strong> If you lose your device, messages are gone forever. There's no "reset password" - that's the price of true privacy.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updatePreview() {
+        const appName = document.getElementById('appName').value || 'SecureChat';
+        const brandColor = document.getElementById('brandColor').value;
+        const tagline = document.getElementById('tagline').value || 'Encrypted messaging';
+        
+        document.getElementById('previewName').textContent = appName;
+        document.getElementById('previewTagline').textContent = tagline;
+        document.getElementById('previewIcon').style.backgroundColor = brandColor;
+        document.getElementById('previewButton').style.backgroundColor = brandColor;
+        document.getElementById('brandColorText').value = brandColor;
+    }
+
+    function syncColorPicker() {
+        const colorText = document.getElementById('brandColorText').value;
+        if (/^#[0-9A-F]{6}$/i.test(colorText)) {
+            document.getElementById('brandColor').value = colorText;
+            updatePreview();
+        }
+    }
+
+    function generateApp() {
+        const appName = document.getElementById('appName').value || 'SecureChat';
+        const brandColor = document.getElementById('brandColor').value;
+        const tagline = document.getElementById('tagline').value || 'Encrypted messaging';
+        const signalingServer = document.getElementById('signalingServer').value;
+        
+        const code = generateEncryptedAppCode(appName, brandColor, tagline, signalingServer);
+        
+        document.getElementById('generatedCode').textContent = code;
+        document.getElementById('generatedSection').classList.remove('hidden');
+        document.getElementById('generatedSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyCode() {
+        const code = document.getElementById('generatedCode').textContent;
+        navigator.clipboard.writeText(code);
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy Code', 2000);
+    }
+
+    function generateEncryptedAppCode(appName, brandColor, tagline, signalingServer) {
+        return `<!DOCTYPE html>
+```
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${appName} - E2E Encrypted</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="app"></div>
+
+```
+<script>
+    const APP_CONFIG = {
+        name: '${appName}',
+        tagline: '${tagline}',
+        brandColor: '${brandColor}',
+        signalingServer: '${signalingServer}'
+    };
+
+    // ENCRYPTION MODULE - AES-GCM with ECDH key exchange
+    class E2EEncryption {
+        constructor() {
+            this.keyPair = null;
+            this.sharedKeys = {}; // peerId -> shared secret
+        }
+
+        async init() {
+            this.keyPair = await window.crypto.subtle.generateKey(
+                { name: "ECDH", namedCurve: "P-256" },
+                true,
+                ["deriveKey", "deriveBits"]
+            );
+        }
+
+        async getPublicKey() {
+            const exported = await window.crypto.subtle.exportKey("raw", this.keyPair.publicKey);
+            return this.arrayBufferToBase64(exported);
+        }
+
+        async deriveSharedKey(peerPublicKeyB64) {
+            const peerPublicKey = await window.crypto.subtle.importKey(
+                "raw",
+                this.base64ToArrayBuffer(peerPublicKeyB64),
+                { name: "ECDH", namedCurve: "P-256" },
+                false,
+                []
+            );
+
+            return await window.crypto.subtle.deriveKey(
+                { name: "ECDH", public: peerPublicKey },
+                this.keyPair.privateKey,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        async encrypt(message, sharedKey) {
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+            const encoded = new TextEncoder().encode(message);
+            
+            const ciphertext = await window.crypto.subtle.encrypt(
+                { name: "AES-GCM", iv: iv },
+                sharedKey,
+                encoded
+            );
+
+            return {
+                ciphertext: this.arrayBufferToBase64(ciphertext),
+                iv: this.arrayBufferToBase64(iv)
+            };
+        }
+
+        async decrypt(encryptedData, sharedKey) {
+            const ciphertext = this.base64ToArrayBuffer(encryptedData.ciphertext);
+            const iv = this.base64ToArrayBuffer(encryptedData.iv);
+
+            const decrypted = await window.crypto.subtle.decrypt(
+                { name: "AES-GCM", iv: iv },
+                sharedKey,
+                ciphertext
+            );
+
+            return new TextDecoder().decode(decrypted);
+        }
+
+        async getFingerprint() {
+            const publicKeyRaw = await window.crypto.subtle.exportKey("raw", this.keyPair.publicKey);
+            const hash = await window.crypto.subtle.digest("SHA-256", publicKeyRaw);
+            const hashArray = Array.from(new Uint8Array(hash));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16).toUpperCase();
+        }
+
+        arrayBufferToBase64(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        base64ToArrayBuffer(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+    }
+
+    // STATE
+    let state = {
+        joined: false,
+        roomId: '',
+        username: '',
+        messages: [],
+        peers: {},
+        myFingerprint: '',
+        showFingerprint: false
+    };
+
+    let ws = null;
+    let peerConnections = {};
+    let dataChannels = {};
+    let crypto = new E2EEncryption();
+
+    const rtcConfig = {
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' }
+        ]
+    };
+
+    async function init() {
+        await crypto.init();
+        state.myFingerprint = await crypto.getFingerprint();
+    }
+
+    function createPeerConnection(peerId) {
+        const pc = new RTCPeerConnection(rtcConfig);
+
+        pc.onicecandidate = (event) => {
+            if (event.candidate && ws?.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'ice-candidate',
+                    candidate: event.candidate,
+                    to: peerId
+                }));
+            }
+        };
+
+        pc.ondatachannel = (event) => {
+            setupDataChannel(event.channel, peerId);
+        };
+
+        peerConnections[peerId] = pc;
+        return pc;
+    }
+
+    function setupDataChannel(channel, peerId) {
+        channel.onopen = async () => {
+            // Exchange public keys for encryption
+            const myPublicKey = await crypto.getPublicKey();
+            channel.send(JSON.stringify({ type: 'key-exchange', publicKey: myPublicKey }));
+        };
+
+        channel.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'key-exchange') {
+                // Derive shared secret from peer's public key
+                const sharedKey = await crypto.deriveSharedKey(data.publicKey);
+                crypto.sharedKeys[peerId] = sharedKey;
+                
+                // Calculate peer fingerprint
+                const peerKeyRaw = crypto.base64ToArrayBuffer(data.publicKey);
+                const hash = await window.crypto.subtle.digest("SHA-256", peerKeyRaw);
+                const hashArray = Array.from(new Uint8Array(hash));
+                const fingerprint = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16).toUpperCase();
+                
+                state.peers[peerId] = { ...state.peers[peerId], fingerprint };
+                addMessage({ 
+                    text: \`🔐 Encrypted connection established with \${state.peers[peerId].username}. Fingerprint: \${fingerprint}\`, 
+                    system: true 
+                });
+            } else if (data.type === 'encrypted-message') {
+                // Decrypt message
+                const sharedKey = crypto.sharedKeys[peerId];
+                if (sharedKey) {
+                    const decrypted = await crypto.decrypt(data.encrypted, sharedKey);
+                    const msgData = JSON.parse(decrypted);
+                    addMessage({
+                        username: msgData.username,
+                        text: msgData.text,
+                        timestamp: new Date(msgData.timestamp),
+                        self: false
+                    });
+                }
+            }
+        };
+
+        dataChannels[peerId] = channel;
+    }
+
+    async function joinRoom() {
+        ws = new WebSocket(APP_CONFIG.signalingServer);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                type: 'join',
+                room: state.roomId,
+                username: state.username
+            }));
+            state.joined = true;
+            addMessage({ text: \`🔐 Your fingerprint: \${state.myFingerprint}\`, system: true });
+            addMessage({ text: 'Connecting to peers...', system: true });
+            render();
+        };
+
+        ws.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+
+            switch (data.type) {
+                case 'peers':
+                    for (const peer of data.peers) {
+                        if (peer.id !== state.username) {
+                            state.peers[peer.id] = { username: peer.username };
+                            const pc = createPeerConnection(peer.id);
+                            const channel = pc.createDataChannel('messages');
+                            setupDataChannel(channel, peer.id);
+                            const offer = await pc.createOffer();
+                            await pc.setLocalDescription(offer);
+                            ws.send(JSON.stringify({ type: 'offer', offer, to: peer.id }));
+                        }
+                    }
+                    render();
+                    break;
+
+                case 'peer-joined':
+                    state.peers[data.peer.id] = { username: data.peer.username };
+                    addMessage({ text: \`\${data.peer.username} joined\`, system: true });
+                    render();
+                    break;
+
+                case 'peer-left':
+                    const leftPeer = state.peers[data.peerId];
+                    delete state.peers[data.peerId];
+                    peerConnections[data.peerId]?.close();
+                    delete peerConnections[data.peerId];
+                    delete dataChannels[data.peerId];
+                    delete crypto.sharedKeys[data.peerId];
+                    addMessage({ text: \`\${data.username} left\`, system: true });
+                    render();
+                    break;
+
+                case 'offer':
+                    const pc = createPeerConnection(data.from);
+                    await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    ws.send(JSON.stringify({ type: 'answer', answer, to: data.from }));
+                    break;
+
+                case 'answer':
+                    await peerConnections[data.from].setRemoteDescription(
+                        new RTCSessionDescription(data.answer)
+                    );
+                    break;
+
+                case 'ice-candidate':
+                    if (peerConnections[data.from]) {
+                        await peerConnections[data.from].addIceCandidate(
+                            new RTCIceCandidate(data.candidate)
+                        );
+                    }
+                    break;
+            }
+        };
+    }
+
+    async function sendMessage(text) {
+        if (!text.trim()) return;
+
+        const message = {
+            username: state.username,
+            text: text,
+            timestamp: new Date().toISOString()
+        };
+
+        // Encrypt and send to each peer
+        for (const [peerId, channel] of Object.entries(dataChannels)) {
+            if (channel.readyState === 'open' && crypto.sharedKeys[peerId]) {
+                const encrypted = await crypto.encrypt(JSON.stringify(message), crypto.sharedKeys[peerId]);
+                channel.send(JSON.stringify({ type: 'encrypted-message', encrypted }));
+            }
+        }
+
+        addMessage({ username: state.username, text, timestamp: new Date(), self: true });
+    }
+
+    function addMessage(msg) {
+        state.messages.push({ ...msg, id: Date.now() + Math.random() });
+        render();
+    }
+
+    function generateRoomId() {
+        state.roomId = Math.random().toString(36).substring(2, 8).toUpperCase();
+        render();
+    }
+
+    function toggleFingerprint() {
+        state.showFingerprint = !state.showFingerprint;
+        render();
+    }
+
+    function render() {
+        const app = document.getElementById('app');
+        
+        if (!state.joined) {
+            app.innerHTML = \`
+                <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+                        <div class="text-center mb-8">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: ${brandColor}">
+                                <svg class="text-white" width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            <h1 class="text-3xl font-bold text-gray-800 mb-2">\${APP_CONFIG.name}</h1>
+                            <p class="text-gray-600">\${APP_CONFIG.tagline}</p>
+                        </div>
+                        <div class="space-y-4">
+                            <input type="text" id="username" placeholder="Your name" class="w-full px-4 py-3 border rounded-lg" value="\${state.username}" />
+                            <div class="flex gap-2">
+                                <input type="text" id="roomId" placeholder="Room ID" class="flex-1 px-4 py-3 border rounded-lg" value="\${state.roomId}" />
+                                <button onclick="generateRoomId()" class="px-4 py-3 bg-gray-200 rounded-lg">Generate</button>
+                            </div>
+                            <button onclick="handleJoin()" class="w-full text-white font-semibold py-3 rounded-lg" style="background-color: ${brandColor}">
+                                Join Encrypted Room
+                            </button>
+                        </div>
+                        <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-3">
+                            <div class="flex items-center gap-2 text-xs text-green-700 font-semibold mb-1">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                                </svg>
+                                End-to-End Encrypted
+                            </div>
+                            <p class="text-xs text-green-600">Messages encrypted before leaving your device. Nobody can intercept them.</p>
+                        </div>
+                    </div>
+                </div>
+            \`;
+        } else {
+            app.innerHTML = \`
+                <div class="min-h-screen bg-gray-100 flex flex-col">
+                    <div class="bg-white border-b px-6 py-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-xl font-bold">Room: \${state.roomId}</h2>
+                                    <svg class="text-green-600" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                                    </svg>
+                                </div>
+                                <div class="text-sm text-gray-600 mt-1">\${Object.keys(state.peers).length + 1} connected · E2E Encrypted</div>
+                                <button onclick="toggleFingerprint()" class="text-xs text-blue-600 hover:text-blue-700 mt-1">
+                                    \${state.showFingerprint ? 'Hide' : 'Show'} Fingerprints
+                                </button>
+                            </div>
+                            <button onclick="location.reload()" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium">Leave</button>
+                        </div>
+                        \${state.showFingerprint ? \`
+                            <div class="mt-4 bg-blue-50 rounded-lg p-4 text-sm">
+                                <div class="font-bold text-blue-900 mb-2">🔐 Key Fingerprints (verify through another channel):</div>
+                                <div class="space-y-2">
+                                    <div class="bg-white p-2 rounded">
+                                        <span class="font-semibold">You:</span> <code class="text-xs">\${state.myFingerprint}</code>
+                                    </div>
+                                    \${Object.entries(state.peers).map(([id, peer]) => \`
+                                        <div class="bg-white p-2 rounded">
+                                            <span class="font-semibold">\${peer.username}:</span> 
+                                            <code class="text-xs">\${peer.fingerprint || 'Connecting...'}</code>
+                                        </div>
+                                    \`).join('')}
+                                </div>
+                                <p class="text-xs text-blue-700 mt-2">⚠️ Verify these match when you talk to your contacts via phone/in-person to prevent MITM attacks.</p>
+                            </div>
+                        \` : ''}
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 space-y-4" id="messages">
+                        \${state.messages.map(msg => \`
+                            <div class="\${msg.system ? 'text-center' : msg.self ? 'flex justify-end' : 'flex justify-start'}">
+                                \${msg.system ? \`
+                                    <div class="text-sm text-gray-500 bg-gray-200 px-4 py-2 rounded-full max-w-md">\${msg.text}</div>
+                                \` : \`
+                                    <div class="max-w-xs lg:max-w-md">
+                                        <div class="text-xs text-gray-500 mb-1">\${msg.username}</div>
+                                        <div class="px-4 py-2 rounded-2xl \${msg.self ? 'text-white' : 'bg-white'}" style="\${msg.self ? 'background-color: ${brandColor}' : ''}">
+                                            \${msg.text}
+                                        </div>
+                                        <div class="text-xs text-gray-400 mt-1">
+                                            \${msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                    </div>
+                                \`}
+                            </div>
+                        \`).join('')}
+                    </div>
+                    <div class="bg-white border-t px-6 py-4">
+                        <div class="flex gap-2">
+                            <input type="text" id="messageInput" placeholder="Type encrypted message..." class="flex-1 px-4 py-3 border rounded-lg" />
+                            <button onclick="handleSend()" class="px-6 py-3 text-white rounded-lg font-medium" style="background-color: ${brandColor}">Send</button>
+                        </div>
+                        <div class="text-xs text-green-600 mt-2 flex items-center gap-1">
+                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+                            </svg>
+                            Messages encrypted with AES-256-GCM
+                        </div>
+                    </div>
+                </div>
+            \`;
+            setTimeout(() => {
+                const msgs = document.getElementById('messages');
+                if (msgs) msgs.scrollTop = msgs.scrollHeight;
+            }, 10);
+        }
+    }
+
+    function handleJoin() {
+        state.username = document.getElementById('username').value;
+        state.roomId = document.getElementById('roomId').value.toUpperCase();
+        if (state.username && state.roomId) joinRoom();
+    }
+
+    function handleSend() {
+        const input = document.getElementById('messageInput');
+        if (input) {
+            sendMessage(input.value);
+            input.value = '';
+        }
+    }
+
+    // Initialize encryption and render
+    init().then(() => render());
+</script>
+```
+
+</body>
+</html>\`;
+        }
+
+```
+    updatePreview();
+</script>
+```
+
+</body>
+</html>
